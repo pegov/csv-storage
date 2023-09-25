@@ -23,15 +23,25 @@
 ```sh
 docker build -f Dockerfile.prod -t csv-storage-prod .
 docker run -it -p 8000:8000 -v ./:/app csv-storage-prod
+# или
+./scripts/prod
 ```
 
 ## Development
 ```sh
 docker build -f Dockerfile.dev -t csv-storage-dev .
 docker run -it -p 8000:8000 -v ./:/app csv-storage-dev
-
 # или
+./scripts/dev
 
+# или напрямую через poetry
 poetry install
 poetry run python uvicorn app.main:app --reload --port 8000
+```
+
+## Formatting, linting and testing
+```sh
+./scripts/format
+./scripts/check
+./scripts/test
 ```
