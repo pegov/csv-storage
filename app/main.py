@@ -121,8 +121,11 @@ async def csv_upload_file(
     should_overwrite = overwrite is not None and (
         overwrite == "1" or overwrite.lower() == "true"
     )
-    assert type(file.filename) is str
-    if not file.filename.endswith("csv"):
+
+    if file.filename is None:
+        raise HTTPException(400, detail="missing filename")
+
+    if file.filename.endswith("csv"):
         raise HTTPException(400, detail="wrong file format")
 
     path = Path(ROOT) / file.filename
