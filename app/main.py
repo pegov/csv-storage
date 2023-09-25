@@ -10,31 +10,31 @@ ROOT = Path("resources")
 
 class CSVFile:
     filename: str
-    reader: pd.DataFrame
+    df: pd.DataFrame
 
-    def __init__(self, filename: str, data: pd.DataFrame):
+    def __init__(self, filename: str, df: pd.DataFrame):
         self.filename = filename
-        self.data = data
+        self.df = df
 
     def to_dict(self) -> dict:
         return {
             "filename": self.filename,
-            "columns": self.data.columns.to_list(),
+            "columns": self.df.columns.to_list(),
         }
 
 
 def load_file(path: Path) -> pd.DataFrame:
-    data = pd.read_csv(path)
-    data = data.fillna(0)
-    return data
+    df = pd.read_csv(path)
+    df = df.fillna(0)
+    return df
 
 
 def load_all_files(path: Path) -> list[CSVFile]:
     files: list[CSVFile] = []
     for file in os.listdir(path):
         if file.endswith(".csv"):
-            data = load_file(path / file)
-            files.append(CSVFile(file, data))
+            df = load_file(path / file)
+            files.append(CSVFile(file, df))
 
     return files
 
