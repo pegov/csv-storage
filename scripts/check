@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export PREFIX="poetry run"
+export SOURCE_FILES="app"
+
+set -x
+
+${PREFIX} flake8 $SOURCE_FILES --ignore=E501,W503 --exclude=__init__.py
+${PREFIX} black --check --diff $SOURCE_FILES
+${PREFIX} mypy $SOURCE_FILES
