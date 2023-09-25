@@ -77,6 +77,22 @@ def test_csv_get_file_sort_asc():
     assert all(data[i]["dy"] <= data[i + 1]["dy"] for i in range(len(data) - 1))
 
 
+def test_csv_get_file_sort_multiple():
+    params = {
+        "filter_key": "yr",
+        "filter_value": "2010",
+        "sort_by": ["mo_desc", "dy_asc"],
+    }
+    response = client.get(f"/api/csv/{NAME}", params=params)
+    assert response.status_code == 200
+    data = response.json()
+    assert all(
+        (data[i]["mo"] == data[i + 1]["mo"] and data[i]["dy"] <= data[i + 1]["dy"])
+        or data[i]["mo"] > data[i + 1]["mo"]
+        for i in range(len(data) - 1)
+    )
+
+
 def test_csv_get_file_not_found():
     response = client.get("/api/csv/not_found")
     assert response.status_code == 404
