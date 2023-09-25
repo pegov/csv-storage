@@ -84,6 +84,8 @@ async def csv_get_file(
                 pass
 
     if sort_by is not None:
+        fields: list[str] = []
+        ascending: list[bool] = []
         for s in sort_by:
             values = s.rsplit("_", 1)
             if len(values) == 2:
@@ -104,7 +106,10 @@ async def csv_get_file(
                     400, detail=f'field "{field}" does not exist in file {filename}'
                 )
 
-            df = df.sort_values(by=field, ascending=order == "asc")
+            fields.append(field)
+            ascending.append(order == "asc")
+
+        df = df.sort_values(by=fields, ascending=ascending)
 
     return df.to_dict("records")
 
