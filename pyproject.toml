@@ -24,6 +24,7 @@ autoflake = "^2.2.1"
 black = "^23.9.1"
 mypy = "^1.5.1"
 pandas-stubs = "^2.0.3.230814"
+httpx = "^0.25.0"
 
 [build-system]
 requires = ["poetry-core"]
