@@ -62,30 +62,26 @@ async def csv_get_file(
     if not path.exists():
         raise HTTPException(404)
 
-    data = load_file(path)
+    df = load_file(path)
 
-    res: list[dict]
     if filter_key is not None and filter_value is not None:
         if len(filter_key) != len(filter_value):
             raise HTTPException(400, detail="filter length mismatch")
 
-        res = []
-        for _, row in data.iterrows():
-            found = True
-            for k, v in zip(filter_key, filter_value):
-                if k not in data.columns:  # type: ignore
-                    raise HTTPException(
-                        400, detail=f'field "{v}" does not exist in file {filename}'
-                    )
-                if str(row[k]) != v:
-                    found = False
-                    break
+        for k, v in zip(filter_key, filter_value):
+            if k not in df.columns:
+                raise HTTPException(
+                    400, detail=f'field "{v}" does not exist in file {filename}'
+                )
 
-            if found:
-                res.append(row.to_dict())
-
-    else:
-        res = [row.to_dict() for _, row in data.iterrows()]
+            if pd.api.types.is_string_dtype(df[k]):
+                df = df[df[k] == v]
+            elif pd.api.types.is_integer_dtype(df[k]):
+                df = df[df[k] == int(v)]
+            elif pd.api.types.is_float_dtype(df[k]):
+                df = df[df[k] == float(v)]
+            else:
+                pass
 
     if sort_by is not None:
         for s in sort_by:
@@ -103,14 +99,14 @@ async def csv_get_file(
                     detail=f'wrong order value "{order}"',
                 )
 
-            if field not in data.columns:  # type: ignore
+            if field not in df.columns:  # type: ignore
                 raise HTTPException(
                     400, detail=f'field "{field}" does not exist in file {filename}'
                 )
 
-            res.sort(key=lambda x: x[field], reverse=order == "desc")
+            df = df.sort_values(by=field, ascending=order == "asc")
 
-    return res
+    return df.to_dict("records")
 
 
 @app.post("/api/csv")
