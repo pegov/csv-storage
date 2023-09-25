@@ -125,7 +125,7 @@ async def csv_upload_file(
     if file.filename is None:
         raise HTTPException(400, detail="missing filename")
 
-    if file.filename.endswith("csv"):
+    if not file.filename.endswith(".csv"):
         raise HTTPException(400, detail="wrong file format")
 
     path = Path(ROOT) / file.filename
