@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Annotated
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException, Query, UploadFile, Form
+from fastapi import FastAPI, Form, HTTPException, Query, UploadFile
 
 ROOT = Path("resources")
 
