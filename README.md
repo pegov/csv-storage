@@ -14,6 +14,7 @@
 - `GET /api/csv/{filename}` - Получение данных из конкретного файла в json формате с опциональными фильтрацией и сортировкой по одному или нескольким стотбцам
 	- `GET /api/csv/ign?sort_by=score_desc` - Отсортировать записи по колонке "score" в убывающем порядке
 	- `GET /api/csv/ign?sort_by=score_asc` - Отсортировать записи по колонке "score" в возрастающем порядке
+	- `GET /api/csv/ign?sort_by=score_desc&sort_by=release_year_asc` - Отсортировать записи по колонке "score" в убывающем порядке и по колонке "release_year" в возрастающем порядке 
 	- `GET /api/csv/tornados?filter_key=yr&filter_value=2010` - Найти записи, в которых колонка "yr" равна 2010
 	- `GET /api/csv/tornados?filter_key=yr&filter_value=1951&filter_key=mo&filter_value=12&sort_by=dy_desc` - Найти записи, в которых колонка "yr" равна 1951, колонка "mo" равна 12 и отсортировать по колонке "dy" в убывающем порядке
 - `DELETE /api/csv/{filename}` - Удаление файла
